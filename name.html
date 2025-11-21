@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>فرم ثبت نام</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700&display=swap');
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Vazirmatn', sans-serif;
+      min-height: 100vh;
+    }
+
+    #particles-js {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 0;
+      background: #7682f2;
+    }
+
+    .form-container {
+      position: relative;
+      z-index: 1;
+    }
+
+    .bg-white {
+      background-color: rgba(255, 255, 255, 0.95);
+    }
+
+    .input-focus-effect:focus {
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .error-message {
+      animation: fadeIn 0.3s ease-in-out;
+    }
+  </style>
+</head>
+<body class="bg-gray-100">
+
+  <div id="particles-js"></div>
+
+  <div class="form-container flex items-center justify-center py-10 px-4">
+    <div class="bg-white rounded-xl shadow-lg w-full max-w-md overflow-hidden">
+      <div class="bg-violet-600 py-4 px-6">
+        <h1 class="text-white text-2xl font-bold text-center">ثبت نام در سایت</h1>
+        <a href="./index.php" class="text-sm text-blue-200 hover:underline block text-center">برگشت به صفحه اصلی</a>
+        <center>
+          <img src="https://cdn.dribbble.com/userupload/21400504/file/original-f48ea41417d7cb30749c82929d584628.gif" style="width:300px;height:150px;">
+        </center>
+      </div>
+      <form style="background:#9cc1ff" method="post" action="" class="space-y-4 p-6">
+        <div class="space-y-6">
+          <div>
+            <label for="fullname" class="block text-gray-700 mb-1">نام کامل</label>
+            <input type="text" id="fullname" name="fullname" class="w-full pr-3 pl-3 py-2 border border-gray-300 rounded-lg input-focus-effect" placeholder="نام و نام خانوادگی" required>
+          </div>
+          <div>
+            <label for="email" class="block text-gray-700 mb-1">ایمیل</label>
+            <input type="email" id="email" name="email" class="w-full pr-3 pl-3 py-2 border border-gray-300 rounded-lg input-focus-effect" placeholder="example@example.com" required>
+          </div>
+          <div>
+            <label for="phone" class="block text-gray-700 mb-1">شماره موبایل</label>
+            <input type="tel" id="phone" name="phone" class="w-full pr-3 pl-3 py-2 border border-gray-300 rounded-lg input-focus-effect" placeholder="09123456789" required>
+          </div>
+          <div>
+            <label for="password" class="block text-gray-700 mb-1">رمز عبور</label>
+            <input type="password" id="password" name="password" class="w-full pr-3 pl-3 py-2 border border-gray-300 rounded-lg input-focus-effect" placeholder="حداقل 8 کاراکتر" required>
+          </div>
+          <div class="flex items-start">
+            <input id="terms" name="terms" type="checkbox" class="mr-2" required>
+            <label for="terms" class="text-sm">با <a href="#" class="text-blue-600 underline">قوانین سایت</a> موافقم</label>
+          </div>
+        </div>
+        <button type="submit" name="save" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition duration-200">
+          ثبت نام
+        </button>
+      </form>
+      <?php
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['save'])) {
+            $fullname = $_POST['fullname'];
+            $email = $_POST['email'];
+            $phone = $_POST['phone'];
+            $password = $_POST['password'];
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+            $conn = mysqli_connect("localhost", "abedin_data", "805533", "abedin_amir");
+
+            if (!$conn) {
+                echo "<p class='mt-4 text-red-500 text-center'>خطا در اتصال به پایگاه داده.</p>";
+                exit;
+            }
+
+            mysqli_set_charset($conn, "utf8mb4");
+
+            $stmt = mysqli_prepare($conn, "INSERT INTO `form866` (`fullname`, `email`, `phone`, `password`) VALUES (?, ?, ?, ?)");
+            mysqli_stmt_bind_param($stmt, "ssss", $fullname, $email, $phone, $hashedPassword);
+
+            if (mysqli_stmt_execute($stmt)) {
+                echo "<p class='mt-4 text-green-600 text-center'>ثبت‌نام با موفقیت انجام شد.</p>";
+            } else {
+                echo "<p class='mt-4 text-red-500 text-center'>خطا در ثبت اطلاعات.</p>";
+            }
+
+            mysqli_stmt_close($stmt);
+            mysqli_close($conn);
+        }
+      ?>
+    </div>
+  </div>
+
+  <script>
+    particlesJS("particles-js", {
+      "particles": {
+        "number": { "value": 70 },
+        "size": { "value": 3 },
+        "color": { "value": "#e9d5ff" },
+        "move": { "speed": 1 },
+        "line_linked": { "enable": true, "opacity": 0.3 }
+      }
+    });
+  </script>
+</body>
+</html>
