@@ -1,0 +1,354 @@
+<!DOCTYPE html><html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>عابدینی</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap');
+    body {
+      font-family: 'Noto Naskh Arabic', serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 0;
+    }
+    .car-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+    .nav-link:hover { color: #f59e0b; }
+    .hero {
+      background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+        url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
+      background-size: cover;
+      background-position: center;
+    }
+    .loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #1a202c, #2d3748);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.5s ease-out;
+    }
+    .car-icon {
+      font-size: 3rem;
+      color: #f59e0b;
+      margin-bottom: 2rem;
+      animation: bounce 1.5s infinite;
+    }
+    .progress-bar {
+      width: 80%;
+      max-width: 300px;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+    .progress {
+      height: 100%;
+      width: 0%;
+      background: #f59e0b;
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+    .loading-text {
+      color: white;
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+    .brand-name {
+      color: #f59e0b;
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 2rem;
+    }
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(255, 255, 255, 0.1);
+      border-top: 4px solid #f59e0b;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 1.5rem;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+  </style>
+  <script>
+    if (!sessionStorage.getItem('visited')) {
+      document.documentElement.classList.add('show-loader');
+    }
+  </script>
+</head>
+<body>
+  <!-- Loader Section -->
+  <div class="loader" id="loader">
+    <div class="spinner"></div>
+    <div class="brand-name">لوکس کارز</div>
+    <div class="loading-text">در حال بارگذاری خودروهای لوکس...</div>
+    <div class="progress-bar">
+      <div class="progress" id="progress"></div>
+    </div>
+    <div class="car-icon">
+      <i class="fas fa-car"></i>
+    </div>
+  </div>  <!-- Main Content Section -->  <div id="content" style="display: none;">
+    <!-- اینجا تمام محتوای اصلی سایت شما وارد شده است (منو، خودروها، درباره ما، تماس، فوتر) -->
+    <!-- من کد کامل از فایل قبلی شما رو بدون تکرار یا خرابکاری اینجا قرار می‌دم. -->
+    <!-- Navigation -->
+<nav class="bg-gray-900 text-white shadow-lg sticky top-0 z-50">
+  <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+    <div class="flex items-center space-x-4 space-x-reverse">
+      <i class="fas fa-car text-2xl text-amber-500"></i>
+      <span class="text-xl font-bold">لوکس کارز</span>
+    </div>
+    <div class="hidden md:flex space-x-8 space-x-reverse">
+      <a href="#home" class="nav-link hover:text-amber-500 transition duration-300">صفحه اصلی</a>
+      <a href="#cars" class="nav-link hover:text-amber-500 transition duration-300">خودروها</a>
+      <a href="#about" class="nav-link hover:text-amber-500 transition duration-300">درباره ما</a>
+      <a href="#contact" class="nav-link hover:text-amber-500 transition duration-300">تماس با ما</a>
+      <a href="./name.php" class="block py-3 hover:bg-indigo-700 px-2">ثبت نام</a>
+    </div>
+	<button id="mobile-menu-btn" class="md:hidden text-white">
+    <i class="fas fa-bars text-xl"></i>
+    </button>
+	<div id="mobile-menu" class="hidden bg-indigo-800 text-white md:hidden">
+        <div class="container mx-auto px-4 py-2">
+            <a href="#" class="block py-3 border-b border-indigo-700 hover:bg-indigo-700 px-2">صفحه اصلی</a>
+            <a href="#" class="block py-3 border-b border-indigo-700 hover:bg-indigo-700 px-2">خودروها</a>
+            <a href="#" class="block py-3 border-b border-indigo-700 hover:bg-indigo-700 px-2">درباره ما</a>
+            <a href="#" class="block py-3 border-b border-indigo-700 hover:bg-indigo-700 px-2">تماس با ما</a>
+			<a href="./name.php"class="block py-3 hover:bg-indigo-700 px-2">ثبت نام</a>
+        </div>
+    </div>
+  </div>
+</nav><!-- Hero Section --><section id="home" class="hero h-96 flex items-center justify-center text-white">
+  <div class="text-center px-4">
+    <h1 class="text-4xl md:text-5xl font-bold mb-4">به دنیای خودروهای لوکس خوش آمدید</h1>
+    <p class="text-xl md:text-2xl mb-8">برترین و لوکسترین خودروهای جهان را اینجا ببینید</p>
+    <a href="#cars" class="bg-amber-500 hover:bg-amber-600 text-gray-900 font-bold py-3 px-6 rounded-full transition duration-300">
+      مشاهده خودروها
+    </a>
+  </div>
+</section><!-- Cars Section --><section id="cars" class="py-16 bg-white">
+  <div class="container mx-auto px-4">
+    <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">معرفی خودروهای لوکس</h2>
+    <!-- اینجا کارت خودروها قرار می‌گیرند (برای اختصار حذف شده‌اند) -->
+	<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Car 1 -->
+                <div class="car-card bg-white rounded-xl shadow-md overflow-hidden transition duration-500">
+                    <img src="https://cdn.yjc.ir/files/fa/news/1399/5/6/12303494_656.jpg" 
+                         alt="Rolls Royce Phantom" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-gray-800">رولز رویس فانتوم</h3>
+                        <p class="text-gray-600 mb-4">نماد بی‌همتای لوکس و اشرافی در صنعت خودروسازی</p>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-amber-500 font-bold">قیمت: از ۵۰۰,۰۰۰ دلار</span>
+                            <span class="text-gray-500"><i class="fas fa-tachometer-alt"></i> ۶.۷۵ لیتر V12</span>
+                        </div>
+                        <button class="w-full bg-gray-900 hover:bg-gray-800 text-white py-2 rounded-lg transition duration-300">
+                            جزئیات بیشتر
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Car 2 -->
+                <div class="car-card bg-white rounded-xl shadow-md overflow-hidden transition duration-500">
+                    <img src="https://divar.news/bentley-continental-gt-overview/bentley-continental-gt-overview-2018-03/" 
+                         alt="Bentley Continental GT" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-gray-800">بنتلی کنتیننتال جی‌تی</h3>
+                        <p class="text-gray-600 mb-4">ترکیبی از قدرت، لوکس و طراحی خیره‌کننده</p>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-amber-500 font-bold">قیمت: از ۲۰۲,۰۰۰ دلار</span>
+                            <span class="text-gray-500"><i class="fas fa-tachometer-alt"></i> ۶.۰ لیتر W12</span>
+                        </div>
+                        <button class="w-full bg-gray-900 hover:bg-gray-800 text-white py-2 rounded-lg transition duration-300">
+                            جزئیات بیشتر
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Car 3 -->
+                <div class="car-card bg-white rounded-xl shadow-md overflow-hidden transition duration-500">
+                    <img src="https://divar.news/wp-content/uploads/2020/11/closer-look-at-mercedes-maybach-s-class-2021.jpg" 
+                         alt="Mercedes Maybach S-Class" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-gray-800">مرسدس مایباخ اس‌کلاس</h3>
+                        <p class="text-gray-600 mb-4">تجربه‌ای بی‌نظیر از رانندگی با بالاترین استانداردهای راحتی</p>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-amber-500 font-bold">قیمت: از ۱۸۵,۰۰۰ دلار</span>
+                            <span class="text-gray-500"><i class="fas fa-tachometer-alt"></i> ۶.۰ لیتر V12</span>
+                        </div>
+                        <button class="w-full bg-gray-900 hover:bg-gray-800 text-white py-2 rounded-lg transition duration-300">
+                            جزئیات بیشتر
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Car 4 -->
+                <div class="car-card bg-white rounded-xl shadow-md overflow-hidden transition duration-500">
+                    <img src="https://ershaco.com/blog/wp-content/uploads/2016/03/Aston-DB11-3.jpg"
+                         alt="Aston Martin DB11" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-gray-800">آستون مارتین دی‌بی۱۱</h3>
+                        <p class="text-gray-600 mb-4">ترکیب زیبایی و قدرت در یک خودروی اسپورت لوکس</p>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-amber-500 font-bold">قیمت: از ۲۰۵,۰۰۰ دلار</span>
+                            <span class="text-gray-500"><i class="fas fa-tachometer-alt"></i> ۵.۲ لیتر V12</span>
+                        </div>
+                        <button class="w-full bg-gray-900 hover:bg-gray-800 text-white py-2 rounded-lg transition duration-300">
+                            جزئیات بیشتر
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Car 5 -->
+                <div class="car-card bg-white rounded-xl shadow-md overflow-hidden transition duration-500">
+                    <img src="https://www.pedal.ir/wp-content/uploads/2022/01/porsche-911-turbo-s.jpg" 
+                         alt="Porsche 911 Turbo S" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-gray-800">پورشه ۹۱۱ توربو اس</h3>
+                        <p class="text-gray-600 mb-4">اسطوره‌ای در دنیای خودروهای اسپورت با امکانات لوکس</p>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-amber-500 font-bold">قیمت: از ۲۰۳,۵۰۰ دلار</span>
+                            <span class="text-gray-500"><i class="fas fa-tachometer-alt"></i> ۳.۸ لیتر توربو</span>
+                        </div>
+                        <button class="w-full bg-gray-900 hover:bg-gray-800 text-white py-2 rounded-lg transition duration-300">
+                            جزئیات بیشتر
+                        </button>
+                    </div>
+                </div>
+				
+				 <!-- Car 6 -->
+                <div class="car-card bg-white rounded-xl shadow-md overflow-hidden transition duration-500">
+                    <img src="https://cdn-sth.bama.ir/uploads/BamaImages/News/4b3c0185-faf0-4a46-b6c5-c279a8e63a3e/article_637488925364612627.jpg?width=290" 
+                         alt="Porsche 911 Turbo S" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2 text-gray-800">بوگاتی شیرون</h3>
+                        <p class="text-gray-600 mb-4">نبوغ فرانسوی لوکس ترین خودروی فرانسه</p>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-amber-500 font-bold">قیمت: از 3,900,000 میلیون دلار</span>
+                            <span class="text-gray-500"><i class="fas fa-tachometer-alt"></i> لیتر توربو 4.2</span>
+                        </div>
+                        <button class="w-full bg-gray-900 hover:bg-gray-800 text-white py-2 rounded-lg transition duration-300">
+                            جزئیات بیشتر
+                        </button>
+                    </div>
+                </div>
+            </div>
+      </div>
+  </div>
+</section><!-- About Section --><section id="about" class="py-16 bg-gray-100">
+  <div class="container mx-auto px-4">
+    <div class="flex flex-col md:flex-row items-center">
+      <div class="md:w-1/2 mb-8 md:mb-0 md:pr-8">
+        <h2 class="text-3xl font-bold mb-6 text-gray-800">درباره لوکس کارز</h2>
+        <p class="text-gray-600 mb-4 leading-relaxed">
+          لوکس کارز با بیش از ۱۵ سال تجربه در زمینه معرفی و فروش خودروهای لوکس و اسپورت، به عنوان یکی از معتبرترین مراجع در این صنعت شناخته می‌شود.
+        </p>
+        <p class="text-gray-600 leading-relaxed">
+          تیم متخصص ما متشکل از کارشناسان باتجربه در زمینه خودروهای لوکس است که همواره در تلاشند تا جدیدترین مدل‌ها و تکنولوژی‌های روز دنیا را به شما معرفی کنند.
+        </p>
+      </div>
+      <div class="md:w-1/2">
+        <img src="https://mediablog.khodro45.com/image/2020/09/%D8%A8-%D8%A7%D9%85-%D9%88-%D8%B3%D8%B1%DB%8C-7.jpg" alt="About Lux Cars" class="w-full rounded-lg shadow-lg">
+      </div>
+    </div>
+  </div>
+</section><!-- Contact Section --><section id="contact" class="py-16">
+  <div class="container mx-auto px-4">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+      <div class="bg-gray-100 p-6 rounded-xl shadow-sm">
+        <i class="fas fa-map-marker-alt text-3xl text-amber-500 mb-4"></i>
+        <h3 class="text-xl font-bold mb-2 text-gray-800">آدرس</h3>
+        <p class="text-gray-600">تهران، خیابان ولیعصر، پلاک ۱۲۳۴</p>
+      </div>
+      <div class="bg-gray-100 p-6 rounded-xl shadow-sm">
+        <i class="fas fa-phone-alt text-3xl text-amber-500 mb-4"></i>
+        <h3 class="text-xl font-bold mb-2 text-gray-800">تلفن</h3>
+        <p class="text-gray-600">۰۲۱-۱۲۳۴۵۶۷۸</p>
+        <p class="text-gray-600">۰۹۱۲-۱۲۳۴۵۶۷</p>
+      </div>
+      <div class="bg-gray-100 p-6 rounded-xl shadow-sm">
+        <i class="fas fa-envelope text-3xl text-amber-500 mb-4"></i>
+        <h3 class="text-xl font-bold mb-2 text-gray-800">ایمیل</h3>
+        <p class="text-gray-600">info@luxcars.com</p>
+        <p class="text-gray-600">support@luxcars.com</p>
+      </div>
+    </div>
+  </div>
+</section><!-- Footer --><footer class="bg-gray-900 text-white py-8">
+  <div class="container mx-auto px-4">
+    <div class="flex flex-col md:flex-row justify-between items-center">
+      <div class="mb-6 md:mb-0">
+        <div class="flex items-center space-x-4 space-x-reverse">
+          <i class="fas fa-car text-2xl text-amber-500"></i>
+          <span class="text-xl font-bold">لوکس کارز</span>
+        </div>
+        <p class="mt-2 text-gray-400">مرجع تخصصی خودروهای لوکس و اسپورت</p>
+      </div>
+      <div class="flex space-x-6 space-x-reverse">
+        <a href="#" class="text-gray-400 hover:text-amber-500 transition duration-300"><i class="fab fa-instagram text-2xl"></i></a>
+        <a href="#" class="text-gray-400 hover:text-amber-500 transition duration-300"><i class="fab fa-telegram text-2xl"></i></a>
+        <a href="#" class="text-gray-400 hover:text-amber-500 transition duration-300"><i class="fab fa-twitter text-2xl"></i></a>
+        <a href="#" class="text-gray-400 hover:text-amber-500 transition duration-300"><i class="fab fa-youtube text-2xl"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+  </div>
+  <script>
+  // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+    document.addEventListener('DOMContentLoaded', () => {
+      const loader = document.getElementById('loader');
+      const content = document.getElementById('content');
+      const progressBar = document.getElementById('progress');
+
+      if (document.documentElement.classList.contains('show-loader')) {
+        sessionStorage.setItem('visited', 'true');
+        let progress = 0;
+        const interval = setInterval(() => {
+          progress += Math.random() * 10;
+          if (progress > 100) progress = 100;
+          progressBar.style.width = progress + '%';
+          if (progress === 100) {
+            clearInterval(interval);
+            setTimeout(() => {
+              loader.style.opacity = '0';
+              setTimeout(() => {
+                loader.style.display = 'none';
+                content.style.display = 'block';
+              }, 500);
+            }, 500);
+          }
+        }, 200);
+      } else {
+        loader.style.display = 'none';
+        content.style.display = 'block';
+      }
+    });
+  </script>
+  </body>
+</html>
